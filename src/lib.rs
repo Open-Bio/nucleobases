@@ -1,6 +1,7 @@
 use std::marker::Copy;
 use std::clone::Clone;
 use std::hash::Hash;
+use std::convert::TryFrom;
 
 use std::fmt;
 use std::cmp;
@@ -93,6 +94,23 @@ impl Nucleobase {
     pub fn to_letter_code(&self) -> char { to_letter_code(self) }
 
     pub fn from_letter_code(letter_code: &char) -> Option<Self> { from_letter_code(letter_code) }
+}
+
+impl TryFrom<&char> for Nucleobase {
+    type Error = &'static str;
+
+    fn try_from(c: &char) -> Result<Self, Self::Error> {
+        match from_letter_code(c) {
+            Some(base) => Ok(base),
+            None => Err("Invalid character code")
+        }
+    }
+}
+
+impl TryFrom<char> for Nucleobase {
+    type Error = &'static str;
+
+    fn try_from(c: char) -> Result<Self, Self::Error> { Self::try_from(&c) }
 }
 
 impl fmt::Display for Nucleobase {
