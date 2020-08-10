@@ -1,8 +1,11 @@
+use std::marker::Copy;
+use std::clone::Clone;
+use std::hash::Hash;
 
-use crate::Nucleobase::{Adenine, Cytosine, Guanine, Thymine, Uracil};
+use std::fmt;
+use std::cmp;
 
-#[derive(std::fmt::Debug)]
-#[derive(std::cmp::PartialEq)]
+#[derive(Copy, Clone, cmp::Eq, cmp::PartialEq, cmp::Ord, cmp::PartialOrd, Hash, fmt::Debug)]
 pub enum Nucleobase {
     Adenine,
     Cytosine,
@@ -13,63 +16,63 @@ pub enum Nucleobase {
 
 pub fn is_purine(base: &Nucleobase) -> bool {
     match base {
-        Adenine | Guanine => true,
-        Cytosine | Thymine | Uracil => false,
+        Nucleobase::Adenine | Nucleobase::Guanine => true,
+        Nucleobase::Cytosine | Nucleobase::Thymine | Nucleobase::Uracil => false,
     }
 }
 
 pub fn is_pyrimidine(base: &Nucleobase) -> bool {
     match base {
-        Adenine | Guanine => false,
-        Cytosine | Thymine | Uracil => true,
+        Nucleobase::Adenine | Nucleobase::Guanine => false,
+        Nucleobase::Cytosine | Nucleobase::Thymine | Nucleobase::Uracil => true,
     }
 }
 
 pub fn is_ketone(base: &Nucleobase) -> bool {
     match base {
-        Adenine | Cytosine => false,
-        Guanine | Thymine | Uracil => true,
+        Nucleobase::Adenine | Nucleobase::Cytosine => false,
+        Nucleobase::Guanine | Nucleobase::Thymine | Nucleobase::Uracil => true,
     }
 }
 
 pub fn is_amine(base: &Nucleobase) -> bool {
     match base {
-        Adenine | Cytosine => true,
-        Guanine | Thymine | Uracil => false,
+        Nucleobase::Adenine | Nucleobase::Cytosine => true,
+        Nucleobase::Guanine | Nucleobase::Thymine | Nucleobase::Uracil => false,
     }
 }
 
 pub fn is_ribonucleotide_base(base: &Nucleobase) -> bool {
     match base {
-        Adenine | Cytosine | Guanine | Uracil => true,
-        Thymine => false,
+        Nucleobase::Adenine | Nucleobase::Cytosine | Nucleobase::Guanine | Nucleobase::Uracil => true,
+        Nucleobase::Thymine => false,
     }
 }
 
 pub fn is_deoxyribonucleotide_base(base: &Nucleobase) -> bool {
     match base {
-        Adenine | Cytosine | Guanine | Thymine => true,
-        Uracil => false
+        Nucleobase::Adenine | Nucleobase::Cytosine | Nucleobase::Guanine | Nucleobase::Thymine => true,
+        Nucleobase::Uracil => false
     }
 }
 
-pub fn letter_code(base: &Nucleobase) -> char {
+pub fn to_letter_code(base: &Nucleobase) -> char {
     match base {
-        Adenine => 'A',
-        Cytosine => 'C',
-        Guanine => 'G',
-        Thymine => 'T',
-        Uracil => 'U',
+        Nucleobase::Adenine => 'A',
+        Nucleobase::Cytosine => 'C',
+        Nucleobase::Guanine => 'G',
+        Nucleobase::Thymine => 'T',
+        Nucleobase::Uracil => 'U',
     }
 }
 
 pub fn from_letter_code(letter_code: &char) -> Option<Nucleobase> {
     match letter_code {
-        'A' | 'a' => Some(Adenine),
-        'C' | 'c' => Some(Cytosine),
-        'G' | 'g' => Some(Guanine),
-        'T' | 't' => Some(Thymine),
-        'U' | 'u' => Some(Uracil),
+        'A' | 'a' => Some(Nucleobase::Adenine),
+        'C' | 'c' => Some(Nucleobase::Cytosine),
+        'G' | 'g' => Some(Nucleobase::Guanine),
+        'T' | 't' => Some(Nucleobase::Thymine),
+        'U' | 'u' => Some(Nucleobase::Uracil),
         _ => None
     }
 }
@@ -87,46 +90,51 @@ impl Nucleobase {
 
     pub fn is_deoxyribonucleotide_base(&self) -> bool { is_deoxyribonucleotide_base(self) }
 
-    pub fn letter_code(&self) -> char { letter_code(self) }
+    pub fn to_letter_code(&self) -> char { to_letter_code(self) }
 
-    pub fn from_letter_code(letter_code: &char) -> Option<Nucleobase> { from_letter_code(letter_code) }
+    pub fn from_letter_code(letter_code: &char) -> Option<Self> { from_letter_code(letter_code) }
+}
+
+impl fmt::Display for Nucleobase {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::Nucleobase;
-    use crate::{Adenine, Cytosine, Guanine, Thymine, Uracil};
 
     #[test]
     fn correct_deoxyribonucleotide_bases() {
-        assert_eq!(Adenine.is_deoxyribonucleotide_base(), true);
-        assert_eq!(Cytosine.is_deoxyribonucleotide_base(), true);
-        assert_eq!(Guanine.is_deoxyribonucleotide_base(), true);
-        assert_eq!(Thymine.is_deoxyribonucleotide_base(), true);
-        assert_eq!(Uracil.is_deoxyribonucleotide_base(), false);
+        assert_eq!(Nucleobase::Adenine.is_deoxyribonucleotide_base(), true);
+        assert_eq!(Nucleobase::Cytosine.is_deoxyribonucleotide_base(), true);
+        assert_eq!(Nucleobase::Guanine.is_deoxyribonucleotide_base(), true);
+        assert_eq!(Nucleobase::Thymine.is_deoxyribonucleotide_base(), true);
+        assert_eq!(Nucleobase::Uracil.is_deoxyribonucleotide_base(), false);
     }
 
     #[test]
     fn correct_ribonucleotide_bases() {
-        assert_eq!(Adenine.is_ribonucleotide_base(), true);
-        assert_eq!(Cytosine.is_ribonucleotide_base(), true);
-        assert_eq!(Guanine.is_ribonucleotide_base(), true);
-        assert_eq!(Thymine.is_ribonucleotide_base(), false);
-        assert_eq!(Uracil.is_ribonucleotide_base(), true);
+        assert_eq!(Nucleobase::Adenine.is_ribonucleotide_base(), true);
+        assert_eq!(Nucleobase::Cytosine.is_ribonucleotide_base(), true);
+        assert_eq!(Nucleobase::Guanine.is_ribonucleotide_base(), true);
+        assert_eq!(Nucleobase::Thymine.is_ribonucleotide_base(), false);
+        assert_eq!(Nucleobase::Uracil.is_ribonucleotide_base(), true);
     }
 
     #[test]
     fn correct_letter_codes() {
-        assert_eq!(Nucleobase::from_letter_code(& 'a'), Some(Adenine));
-        assert_eq!(Nucleobase::from_letter_code(& 'A'), Some(Adenine));
-        assert_eq!(Nucleobase::from_letter_code(& 'c'), Some(Cytosine));
-        assert_eq!(Nucleobase::from_letter_code(& 'C'), Some(Cytosine));
-        assert_eq!(Nucleobase::from_letter_code(& 'g'), Some(Guanine));
-        assert_eq!(Nucleobase::from_letter_code(& 'G'), Some(Guanine));
-        assert_eq!(Nucleobase::from_letter_code(& 't'), Some(Thymine));
-        assert_eq!(Nucleobase::from_letter_code(& 'T'), Some(Thymine));
-        assert_eq!(Nucleobase::from_letter_code(& 'u'), Some(Uracil));
-        assert_eq!(Nucleobase::from_letter_code(& 'U'), Some(Uracil));
-        assert_eq!(Nucleobase::from_letter_code(& 'n'), None);
+        assert_eq!(crate::from_letter_code(& 'a'), Some(Nucleobase::Adenine));
+        assert_eq!(crate::from_letter_code(& 'A'), Some(Nucleobase::Adenine));
+        assert_eq!(crate::from_letter_code(& 'c'), Some(Nucleobase::Cytosine));
+        assert_eq!(crate::from_letter_code(& 'C'), Some(Nucleobase::Cytosine));
+        assert_eq!(crate::from_letter_code(& 'g'), Some(Nucleobase::Guanine));
+        assert_eq!(crate::from_letter_code(& 'G'), Some(Nucleobase::Guanine));
+        assert_eq!(crate::from_letter_code(& 't'), Some(Nucleobase::Thymine));
+        assert_eq!(crate::from_letter_code(& 'T'), Some(Nucleobase::Thymine));
+        assert_eq!(crate::from_letter_code(& 'u'), Some(Nucleobase::Uracil));
+        assert_eq!(crate::from_letter_code(& 'U'), Some(Nucleobase::Uracil));
+        assert_eq!(crate::from_letter_code(& 'n'), None);
     }
 }
