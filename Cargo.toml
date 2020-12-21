@@ -11,5 +11,5 @@ documentation = "https://docs.rs/nucleobases"
 readme = "README.md"
 homepage = "https://crates.io/crates/nucleobases"
 repository = "https://github.com/Open-DNA/nucleobases"
-license = "MIT or Apache-2.0"
+license = "MIT OR Apache-2.0"
 keywords = ["nucleobases", "dna", "genomics"]
