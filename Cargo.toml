@@ -2,7 +2,7 @@
 name = "nucleobases"
 version = "1.1.0" # remember to update html_root_url
 authors = [
-    "The Open Bio Project",
+    "The Open Bio Project <https://github.com/Open-Bio>",
     "Will Toll <will@wtoll.com>"
 ]
 edition = "2018"
