@@ -1,13 +1,15 @@
 [package]
 name = "nucleobases"
-version = "0.1.0"
-authors = ["The Open DNA Project"]
+version = "1.1.0" # remember to update html_root_url
+authors = [
+    "The Open Bio Project",
+    "Will Toll <will@wtoll.com>"
+]
 edition = "2018"
-description = "Common library for cross crate standardization of nucleobases in code"
+description = "A simple, low-level brick crate for managing nucleobases as data in code"
 documentation = "https://docs.rs/nucleobases"
 readme = "README.md"
 homepage = "https://crates.io/crates/nucleobases"
 repository = "https://github.com/Open-DNA/nucleobases"
-license = "MIT"
+license = "MIT or Apache-2.0"
 keywords = ["nucleobases", "dna", "genomics"]
-include = ["src/", "LICENSE", "README.md", "COPYRIGHT"]
